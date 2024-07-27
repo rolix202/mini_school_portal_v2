@@ -44,11 +44,6 @@ studentSchema.pre("save", async function(next){
         if (!classInfo){
             throw new Error("Class not found")
         }
-
-        // const count = await Student.countDocuments({class_id: this.class_id})
-
-        // const sequentialNumber = (count + 1).toString().padStart(2, '0')
-
         const className = classInfo.name;
         const classArm = classInfo.class_arm;
 

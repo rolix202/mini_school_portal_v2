@@ -16,7 +16,7 @@ const classSchema = new mongoose.Schema({
         enum: ["junior secondary", "senior secondary"],
         required: true
     },
-    class_teacher_id: {
+    class_teacher: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Staff"
     },
