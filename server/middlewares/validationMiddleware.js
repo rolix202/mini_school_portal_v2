@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 
 
 const withErrorMessages = (what_to_validate) => {
@@ -81,7 +81,7 @@ export const validate_staff_details = withErrorMessages([
         .notEmpty()
         .withMessage("Please confirm your password!")
         .isLength({min: 8})
-        .withMessage("Password must be at least 8 characters long!")
+        .withMessage("Confirm password must be at least 8 characters long!")
         .trim()
         .custom((value, {req}) => {
             if (value !== req.body.password){
@@ -99,9 +99,9 @@ export const validate_staff_details = withErrorMessages([
         // Check if each item in the array is a valid MongoDB ObjectId
             return value.every(id => mongoose.isValidObjectId(id));
     }).withMessage('Invalid subject ID format!'),
-    body("status")
-        .isIn(["active", "in-active"])
-        .withMessage("Invalid status!"),
+    // body("status")
+    //     .isIn(["active", "in-active"])
+    //     .withMessage("Invalid status!"),
 ])
 
 export const validate_subject_details = withErrorMessages([
@@ -115,7 +115,7 @@ export const validate_subject_details = withErrorMessages([
         .isMongoId().withMessage('Invalid subject teacher ID format!'),
 ])
 
-export const validate_class_details = [
+export const validate_class_details = withErrorMessages([
     body('name')
         .notEmpty().withMessage('Class name is required!')
         .isIn(['JSS1', 'JSS2', 'JSS3', 'SS1', 'SS2', 'SS3'])
@@ -129,7 +129,7 @@ export const validate_class_details = [
     body('category')
         .notEmpty().withMessage('Category is required!')
         .isIn(['junior secondary', 'senior secondary'])
-        .withMessage('Invalid category!'),
+        .withMessage('Invalid class category!'),
 
     body('class_teacher')
         .optional()
@@ -139,7 +139,11 @@ export const validate_class_details = [
         .optional()
         .isArray().withMessage('Students should be an array!')
         .custom((value) => {
-            // Check if each item in the array is a valid MongoDB ObjectId
             return value.every(id => mongoose.isValidObjectId(id));
         }).withMessage('Invalid student ID format!'),
-];
+]);
+
+export const validate_id_param = withErrorMessages([
+    param("id")
+        .isMongoId().withMessage("Not a valid ID!")
+])

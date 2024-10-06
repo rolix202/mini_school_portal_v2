@@ -67,7 +67,7 @@ const staffSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ["active", "in-active"],
-        default: "active"
+        default: "in-active"
     },
     public_img_url: String,
     secured_img_url: String

@@ -28,6 +28,12 @@ const studentSchema = new mongoose.Schema({
             ref: "Subject"
         }
     ],
+    results: [
+        { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Result' 
+        }
+    ],
     status: {
         type: String,
         enum: ["active", "in-active"],
@@ -39,7 +45,7 @@ const studentSchema = new mongoose.Schema({
 
 studentSchema.pre("save", async function(next){
     try {
-        const classInfo = await Class.findById(this.class_id)
+        const classInfo = await Class.findById(this.class)
 
         if (!classInfo){
             throw new Error("Class not found")

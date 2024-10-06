@@ -5,8 +5,9 @@ import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from "morgan";
 import mongoose from 'mongoose';
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 dotenv.config()
+import cors from 'cors';
 
 
 import authRoute from "./routes/authRoute.js"
@@ -14,6 +15,7 @@ import classRoute from "./routes/classRoute.js"
 import staffRoute from "./routes/staffRoute.js"
 import studentRoute from "./routes/studentRoute.js"
 import subjectRoute from "./routes/subjectRoute.js"
+import resultRoute from "./routes/resultRoute.js"
 
 
 const app = express();
@@ -36,6 +38,7 @@ const __dirname = path.dirname(__filename)
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
@@ -45,6 +48,7 @@ app.use("/api/v1/staffs", staffRoute)
 app.use("/api/v1/students", studentRoute)
 app.use("/api/v1/class", classRoute)
 app.use("/api/v1/subjects", subjectRoute)
+app.use("/api/v1/assessments", resultRoute)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
