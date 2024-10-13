@@ -19,3 +19,21 @@ export const create_subject = asyncHanler(async(req, res, next) => {
         }
     })
 }) 
+
+export const view_all_subject = asyncHanler(async (req, res, next) => {
+  const subject = await Subject.find()
+
+  if (!subject){
+    return res.status(404).json({
+      status: "fail",
+      message: "No Subject Found"
+    })
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: subject
+  })
+  
+  
+})

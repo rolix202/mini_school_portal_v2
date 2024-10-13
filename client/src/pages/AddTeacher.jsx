@@ -28,8 +28,7 @@ const AddTeacher = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/staffs", teacherData)
-      console.log(response);
+      await axios.post("http://localhost:5000/api/v1/staffs", teacherData)
     setTeacherData({
       firstName: "",
       lastName: "",

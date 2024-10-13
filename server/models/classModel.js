@@ -4,12 +4,12 @@ const classSchema = new mongoose.Schema({
     name: {
         type: String,
         enum: ["JSS1", "JSS2", "JSS3", "SS1", "SS2", "SS3"],
-        required: true
+        required: true,
     },
     class_arm: {
         type: String,
-        enum: ["Galaxy", "Platinum", "Rose", "Flamingo", "MaryGold"],
-        required: true
+        enum: ["Galaxy", "Platinum", "Lincoln", "Rose", "Flamingo", "MaryGold"],
+        required: true,
     },
     category: {
         type: String,
@@ -20,12 +20,7 @@ const classSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Staff"
     },
-    students: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Student"
-        }
-    ]
+    
 });
 
 const Class = mongoose.model("Class", classSchema);

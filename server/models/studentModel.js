@@ -18,7 +18,7 @@ const studentSchema = new mongoose.Schema({
     otherNames: {
         type: String,
     },
-    class: {
+    class_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Class"
     },
@@ -45,7 +45,7 @@ const studentSchema = new mongoose.Schema({
 
 studentSchema.pre("save", async function(next){
     try {
-        const classInfo = await Class.findById(this.class)
+        const classInfo = await Class.findById(this.class_id)
 
         if (!classInfo){
             throw new Error("Class not found")

@@ -1,4 +1,5 @@
 import { body, param, validationResult } from "express-validator";
+import Class from "../models/classModel.js";
 
 
 const withErrorMessages = (what_to_validate) => {
@@ -32,19 +33,17 @@ export const validate_student_details = withErrorMessages([
         .optional()
         .trim()
         .escape(),
-    body('class')
+    body('class_id')
         .optional()
         .isMongoId().withMessage('Invalid class ID format!'),
-    body('subjects')
-        .optional()
-        .isArray().withMessage('Subjects should be an array!')
-        .custom((value) => {
-            // Check if each item in the array is a valid MongoDB ObjectId
-            return value.every(id => mongoose.isValidObjectId(id));
-        }).withMessage('Invalid subject ID format!'),
-    body("status")
-        .isIn(["active", "in-active"])
-        .withMessage("Invalid status!"),
+  body('subjects')
+  .optional()
+  .isArray({ min: 1 }).withMessage('Subjects should be an array with at least one subject!')
+  .custom((value) => value.every((id) => typeof id === 'string'))
+  .withMessage('One or more subject IDs are not valid strings!'),
+
+      
+  
 ])
 
 export const validate_staff_details = withErrorMessages([
@@ -123,8 +122,15 @@ export const validate_class_details = withErrorMessages([
     
     body('class_arm')
         .notEmpty().withMessage('Class arm is required!')
-        .isIn(['Galaxy', 'Platinum', 'Rose', 'Flamingo', 'MaryGold'])
-        .withMessage('Invalid class arm!'),
+        .isIn(['Galaxy', 'Platinum', 'Lincoln', 'Rose', 'Flamingo', 'MaryGold'])
+        .withMessage('Invalid class arm!')
+        .custom(async (value, {req}) => {
+            const existingClass = await Class.findOne({name: req.body.name, class_arm: value})
+
+            if(existingClass){
+                throw new Error('Class name and Arm combination already exists!')
+            }
+        }),
     
     body('category')
         .notEmpty().withMessage('Category is required!')
@@ -135,12 +141,12 @@ export const validate_class_details = withErrorMessages([
         .optional()
         .isMongoId().withMessage('Invalid class teacher ID format!'),
 
-    body('students')
-        .optional()
-        .isArray().withMessage('Students should be an array!')
-        .custom((value) => {
-            return value.every(id => mongoose.isValidObjectId(id));
-        }).withMessage('Invalid student ID format!'),
+    // body('students')
+    //     .optional()
+    //     .isArray().withMessage('Students should be an array!')
+    //     .custom((value) => {
+    //         return value.every(id => mongoose.isValidObjectId(id));
+    //     }).withMessage('Invalid student ID format!'),
 ]);
 
 export const validate_id_param = withErrorMessages([

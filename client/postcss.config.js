@@ -1,32 +1,17 @@
-// export default {
-//   plugins: {
-//     tailwindcss: {},
-//     autoprefixer: {},
-//     process.env.NODE_ENV === 'production' && require('@fullhuman/postcss-purgecss')({
-//       content: [
-//         "./index.html",
-//         "./src/**/*.{js,ts,jsx,tsx}",
-//       ],
-//       defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
-//     })
-//   },
-// }
+import purgecss from '@fullhuman/postcss-purgecss'
 
-
-
-
-const purgecss = require('@fullhuman/postcss-purgecss')({
+const purgecssConfig = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
-});
+};
 
-module.exports = {
+export default {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
-    ...(process.env.NODE_ENV === 'production' ? { purgecss } : {})
+    ...(process.env.NODE_ENV === 'production' ? { purgecss: purgecssConfig } : {})
   },
 };

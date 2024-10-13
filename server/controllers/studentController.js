@@ -1,20 +1,30 @@
 import asyncHandler from "express-async-handler";
 import Student from "../models/studentModel.js";
-
+import Class from "../models/classModel.js";
 
 export const view_students = asyncHandler(async (req, res, next) => {
-    const students = await Student.find()
-        .populate("subjects", "name")
-        .populate("class", "name")
+    const { cname, arm } = req.query;
+
+    if (!cname || !arm) {
+        return res.status(400).json({ message: "Class name and arm are required" });
+    }
+
+    const classInfo = await Class.findOne({ name: cname, class_arm: arm });
+
+    if (!classInfo) {
+        return res.status(404).json({ message: "Class not found" });
+    }
+
+    const students = await Student.find({ class_id: classInfo._id })
+        .select("-results -subjects")
         .populate({
-            path: "results",
-            select: "subject term session assessments totalScore",
+            path: "class_id",
+            select: "name class_arm category",
             populate: {
-                path: "subject",
-                select: "name"
+                path: "class_teacher",
+                select: "firstName lastName phoneNo"
             }
-        })
-        .exec();
+        });
 
     res.status(200).json({
         status: "success",
@@ -24,10 +34,11 @@ export const view_students = asyncHandler(async (req, res, next) => {
     });
 });
 
-export const create_student = asyncHandler(async(req, res, next) => {
+
+export const create_student = asyncHandler(async (req, res, next) => {
     const student = await Student.create(req.body)
 
-    if (!student){
+    if (!student) {
         return res.status(400).json({
             status: "fail",
             message: "Couldn't create student!"
@@ -42,7 +53,7 @@ export const create_student = asyncHandler(async(req, res, next) => {
     })
 })
 
-export const get_student = asyncHandler(async(req, res, next) => {
+export const get_student = asyncHandler(async (req, res, next) => {
     const student = await Student.findById(req.params.id)
         .populate("class", "name class_arm category")
         .populate("subjects")
@@ -56,7 +67,7 @@ export const get_student = asyncHandler(async(req, res, next) => {
 
         })
 
-    if (!student){
+    if (!student) {
         return res.status(404).json({
             status: "fail",
             message: "Student not found!"
@@ -71,12 +82,12 @@ export const get_student = asyncHandler(async(req, res, next) => {
     })
 })
 
-export const update_student = asyncHandler(async(req, res, next) => {
+export const update_student = asyncHandler(async (req, res, next) => {
     const student = await Student.findById(req.params.id)
 
     res.send(student)
 })
 
-export const delete_student = asyncHandler(async(req, res, next) => {
+export const delete_student = asyncHandler(async (req, res, next) => {
     res.send(req.params)
 })
