@@ -29,10 +29,8 @@ const AddStudent = () => {
         setGetSubjects(getSubj)
         setGetClasses(getClasses)
         
-        
       } catch (error) {
         console.log(error);
-        
       }
     }
 
@@ -66,7 +64,7 @@ const AddStudent = () => {
     e.preventDefault()
 
     try {
-      const response = await customFetch.post("/students", formDetails)
+      await customFetch.post("/students", formDetails)
       
       setFormDetails({
         firstName: "",

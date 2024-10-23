@@ -6,18 +6,19 @@ const resultSchema = new mongoose.Schema({
     ref: 'Student', 
     required: true 
   },
+
   subject: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Subject', 
     required: true 
   },
 
-  // term: {type: String, required: true, lowercase: true},
   term: {
     type: String,
-    enum: ["1st Term", "2nd Term", "3rd Term"],
+    enum: ["1st Term", "2nd Term", "3rd term"],
     require: true
   },
+
   session: {type: String, required: true},
 
   assessments:{

@@ -3,7 +3,7 @@ import Student from "../models/studentModel.js";
 import Class from "../models/classModel.js";
 
 export const view_students = asyncHandler(async (req, res, next) => {
-    const { cname, arm } = req.query;
+    const { cname, arm, term, session } = req.query;
 
     if (!cname || !arm) {
         return res.status(400).json({ message: "Class name and arm are required" });
@@ -15,23 +15,52 @@ export const view_students = asyncHandler(async (req, res, next) => {
         return res.status(404).json({ message: "Class not found" });
     }
 
-    const students = await Student.find({ class_id: classInfo._id })
-        .select("-results -subjects")
-        .populate({
-            path: "class_id",
-            select: "name class_arm category",
-            populate: {
-                path: "class_teacher",
-                select: "firstName lastName phoneNo"
+    let students;
+
+    if (term && session) {
+        students = await Student.find({ class_id: classInfo._id })
+            .select(" -subjects ")
+            .populate({
+                path: "results",
+                match: { term: term, session: session },
+                select: "term session"
+            })
+            .populate({
+                path: "class_id",
+                select: "name class_arm category",
+                populate: {
+                    path: "class_teacher",
+                    select: "firstName lastName phoneNo"
+                }
+            });
+
+        const studentsWithResults = students.filter(student => student.results && student.results.length > 0);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                students: studentsWithResults
             }
         });
+    } else {
+        students = await Student.find({ class_id: classInfo._id })
+            .select(" -results -subjects")
+            .populate({
+                path: "class_id",
+                select: "name class_arm category",
+                populate: {
+                    path: "class_teacher",
+                    select: "firstName lastName phoneNo"
+                }
+            });
 
-    res.status(200).json({
-        status: "success",
-        data: {
-            students
-        }
-    });
+            res.status(200).json({
+                status: "success",
+                data: {
+                    students
+                }
+            });
+    }
 });
 
 

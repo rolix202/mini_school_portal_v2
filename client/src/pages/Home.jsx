@@ -37,7 +37,7 @@ const menus = [
             { name: "View Subjects", href: "/dashboard/subjects/view" }
         ] 
     },
-    { name: "Result", href: "/dashboard/results" }
+    { name: "View Result", href: "/dashboard/results/" }
 ]
 
 const Home = () => {

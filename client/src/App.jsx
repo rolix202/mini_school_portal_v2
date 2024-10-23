@@ -13,6 +13,7 @@ import AddStudent from './pages/AddStudent'
 import AddSubjects from './pages/AddSubjects'
 import AddTeacher from './pages/AddTeacher'
 import ViewTeacher from './pages/ViewTeacher'
+import ResultSheet from './pages/resultSheet'
 // import DashHome from './pages/DashHome'
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
             element: <Classes />
           }
         ]
+      },
+      {
+        path: "results/:id",
+        element: <ResultSheet />
       },
       {
         path: "results",
