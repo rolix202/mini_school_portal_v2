@@ -1,3 +1,31 @@
+@import url('https://fonts.cdnfonts.com/css/rockwell-nova');
+@import url('https://fonts.cdnfonts.com/css/schadow-bt');
+@import url('https://fonts.cdnfonts.com/css/lastik-test');
+
+.mary-g{
+  font-family: 'Rockwell Nova Extra Bold', sans-serif;
+  font-size: 40px;
+}
+.mary-g-address{
+  font-family: 'Schadow BT', sans-serif;
+  font-size: 13px;
+  font-weight: 200;
+  
+}
+.mary-g-sec{
+  font-family: 'Rockwell Nova Extra Bold', sans-serif;
+}
+.comment{
+  font-family: 'Lastik Test', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+.score-table{
+  min-width: 633px;
+  max-width: 633px;
+}
+
 .floating-button {
     position: fixed;
     bottom: 20px;

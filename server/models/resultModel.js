@@ -28,14 +28,28 @@ const resultSchema = new mongoose.Schema({
     exam: {type: Number, default: null}
   },
 
-  totalScore: {
+  midTermTotal: {
     type: Number,
-    default: function() {
-      const { firstCA, secondCA, thirdCA, exam } = this.assessments
+    default: function(){
+      const { firstCA, secondCA } = this.assessments;
+      return (firstCA || 0) + (secondCA || 0);
+    }
+  },
+
+  finalTermTotal: {
+    type: Number,
+    default: function(){
+      const { firstCA, secondCA, thirdCA, exam } = this.assessments;
       return (firstCA || 0) + (secondCA || 0) + (thirdCA || 0) + (exam || 0);
     }
-  }
+  },
 });
+
+resultSchema.pre('save', function (next){
+  this.midTermTotal = (this.assessments.firstCA || 0) + (this.assessments.secondCA || 0);
+  this.finalTermTotal = (this.assessments.firstCA || 0) + (this.assessments.secondCA || 0) + (this.assessments.thirdCA || 0) + (this.assessments.exam || 0);
+  next();
+})
 
 const Result = mongoose.model('Result', resultSchema);
 

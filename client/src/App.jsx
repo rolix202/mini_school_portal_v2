@@ -14,6 +14,8 @@ import AddSubjects from './pages/AddSubjects'
 import AddTeacher from './pages/AddTeacher'
 import ViewTeacher from './pages/ViewTeacher'
 import ResultSheet from './pages/resultSheet'
+import CatResult from './pages/CatResult'
+
 // import DashHome from './pages/DashHome'
 
 const router = createBrowserRouter([
@@ -39,7 +41,11 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: "results/:id",
+        path: "results/:id/midterm",
+        element: <CatResult />
+      },
+      {
+        path: "results/:id/finalterm",
         element: <ResultSheet />
       },
       {
