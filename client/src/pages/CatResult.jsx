@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import customFetch from '../utils/customFetch'
 import LogoMaryG from '../assets/maryg.png'
+import Stamp from '../assets/stamp.png'
 
 
 const CatResult = () => {
@@ -18,8 +19,6 @@ const CatResult = () => {
             try {
                 const res = await customFetch.get(`/assessments/${id}?term=${term}&session=${session}`)
                 setStudentResult(res?.data?.data)
-                console.log(res?.data?.data);
-
             } catch (error) {
                 console.error(error);
             } finally {
@@ -35,7 +34,7 @@ const CatResult = () => {
     return (
         <div className="main-content p-10">
             <div className="main-title border-b-2 pb-2">
-                <h1 className='text-xl font-semibold'>Cat Result Sheet</h1>
+                <h1 className='text-xl font-semibold'>Mid-Term Result Sheet</h1>
             </div>
             <div className="main-content-body pt-8">
 
@@ -120,8 +119,11 @@ const CatResult = () => {
                         <tr className='h-20 flex align-top w-full border border-slate-400'>
                             <td className=' font-bold break-words w-full'>ACADEMIC ADVISER'S REMARK: <span className='comment'>PRAISE-GOD, YOU HAVE GREAT ORATORY SKILLS. HOWEVER, MINIMIZE NOISE MAKING IN CLASS.</span> </td>
                         </tr>
-                        <tr className='h-20 flex align-top w-full border border-t-0 border-slate-400'>
+                        <tr className='h-20 flex align-top w-full border border-t-0 border-slate-400 relative'>
                             <td className=' font-bold'>PRINCIPAL'S SIGNATURE/DATE:</td>
+                            <td>
+                                <img src={Stamp} alt="School stamp" className='w-40 h-auto absolute -top-10 -rotate-12 right-36'/>
+                            </td>
                         </tr>
                         
                     </tbody>

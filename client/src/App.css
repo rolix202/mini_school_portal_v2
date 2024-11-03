@@ -29,7 +29,7 @@
 .floating-button {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    right: 50px;
     font-size: 1.5rem;
     line-height: 0;
     display: flex;
@@ -38,4 +38,14 @@
     width: 56px;
     height: 56px;
   }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
+  
+  .animate-shake {
+    animation: shake 0.3s ease-in-out;
+  }
+  
   

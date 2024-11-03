@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import customFetch from '../utils/customFetch';
 
-const useFetchStudents = (initialClass = { name: '', class_arm: '', term: '', session: '' }) => {
+export const useFetchStudents = (initialClass = { name: '', class_arm: '', term: '', session: '' }) => {
   const [students, setStudents] = useState([]);
   const [classInfo, setClassInfo] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,10 @@ const useFetchStudents = (initialClass = { name: '', class_arm: '', term: '', se
     getClassAndArms();
   }, []);
 
-  const fetchStudents = async (includeResults = false ) => {
+  const fetchStudents = async (e, includeResults = false ) => {
+    
+    e.preventDefault();
+
     if (!selectedClassAndArm.name || !selectedClassAndArm.class_arm || (includeResults && (!selectedClassAndArm.term || !selectedClassAndArm.session)) ) {
       alert('All fields required');
       return;
@@ -40,7 +43,6 @@ const useFetchStudents = (initialClass = { name: '', class_arm: '', term: '', se
       const response = await customFetch.get(url)
 
       const studentsData = response?.data?.data?.students;
-      console.log(studentsData);
       
       setStudents(studentsData);
 
@@ -72,4 +74,3 @@ const useFetchStudents = (initialClass = { name: '', class_arm: '', term: '', se
   };
 };
 
-export default useFetchStudents;

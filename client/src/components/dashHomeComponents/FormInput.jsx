@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FormInput = ({ labelName, inputName, type, onChange, value, required, selectOption, options, isFromDb }) => {
+const FormInput = ({ labelName, inputName, type, onChange, value, required, selectOption, options, isFromDb, isStaff }) => {
   return (
     <div className="flex-1 sm:col-span-3">
       <label htmlFor={inputName} className='block text-sm font-medium text-gray-900 mb-1'>
@@ -14,15 +14,20 @@ const FormInput = ({ labelName, inputName, type, onChange, value, required, sele
             value={value}
             onChange={onChange}
             required={required}
-            className="block w-full rounded-md border border-gray-300 py-1.5 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+            className="block w-full rounded-md border border-gray-300 py-1.5 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm capitalize"
           >
             <option value="">Select {labelName} </option>
-            { options && options.map((option, index) => {
-              return (
-                <option value={isFromDb ? option._id : option} key={index}>{isFromDb ? `${option.name + " " + option.class_arm}` : option} </option>
-              )
-            }) }
-            
+            {options && options.map((option, index) => (  
+              <option value={isFromDb ? option._id : option} key={index}>
+                {isFromDb
+                  ? isStaff
+                    ? `${option.firstName + " " + option.lastName}`
+                    : `${option.name + " " + option.class_arm}`
+                  : option
+                }
+              </option>
+            ))}
+
           </select>
         ) : (
           <input

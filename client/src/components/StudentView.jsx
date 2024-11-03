@@ -1,13 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import FormInput from './dashHomeComponents/FormInput';
 import StudentTable from './StudentTable';
 
 const StudentView = ({ classInfo, selectedClassAndArm, handleFormInput, handleSubmit, students, classDetails, renderActions, resultPage }) => {
+
     const uniqueClassName = [...new Set(classInfo.map(info => info.name))];
     const uniqueClassArm = [...new Set(classInfo.map(info => info.class_arm))];
 
     return (
         <div className="main-content p-10 bg-gray-100">
+            
+                <Link to="/dashboard/students/add">
+                     <div className='floating-button bg-blue-700 rounded-full text-white'>+</div>
+                </Link>
+           
             <div className="fetch-students-form mb-8">
                 <form onSubmit={handleSubmit}>
                     <div className="pb-8">

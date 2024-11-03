@@ -2,30 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import customFetch from '../utils/customFetch';
 
-const ResultSheet = () => {
-  const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const [studentResult, setStudentResult] = useState([]);
-  const [loading, setLoading] = useState(true);
+const EditResult = ({ studentResult, setStudentResult }) => {
   const [editingRow, setEditingRow] = useState(null); // Track which row is being edited
-
-  const term = searchParams.get("term");
-  const session = searchParams.get("session");
-
-  useEffect(() => {
-    const fetchResults = async () => {
-      try {
-        const res = await customFetch.get(`/assessments/${id}?term=${term}&session=${session}`);  
-        setStudentResult(res?.data?.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchResults();
-  }, [id, term, session]);
 
   // Handle inline editing changes
   const handleInputChange = (e, index, field) => {
@@ -34,7 +12,7 @@ const ResultSheet = () => {
     updatedResults[index].assessments[field] = value;
 
     // Update the total score automatically
-    updatedResults[index].totalScore = parseFloat(updatedResults[index].assessments.firstCA || 0)
+    updatedResults[index].midTermTotal = parseFloat(updatedResults[index].assessments.firstCA || 0)
       + parseFloat(updatedResults[index].assessments.secondCA || 0);
 
     setStudentResult(updatedResults);
@@ -43,10 +21,9 @@ const ResultSheet = () => {
   // Handle saving the updated results
   const handleSave = async (result, index) => {
     try {
-      await customFetch.put(`/assessments/${id}/${result.subject.id}`, {
+      await customFetch.patch(`/assessments/${result._id}`, {
         firstCA: result.assessments.firstCA,
         secondCA: result.assessments.secondCA,
-        totalScore: result.totalScore
       });
       alert('Result updated successfully!');
     } catch (error) {
@@ -58,35 +35,32 @@ const ResultSheet = () => {
     }
   };
 
-  if (loading) return <p>Loading results...</p>;
+
 
   return (
-    <div className="main-content p-10">
-      <div className="main-title border-b-2 pb-2">
-        <h1 className='text-xl font-semibold'>Result Sheet</h1>
-      </div>
-      <div className="main-content-body pt-8">
-        <table className='table-auto w-1/2 border border-collapse text-blue-950'>
+    <div className="main-content">
+      <div className="main-content-body">
+        <table className='table-auto border border-collapse text-blue-950 w-full'>
           <thead>
             <tr>
-              <th className="border text-left border-slate-400">S/N</th>
-              <th className="border text-left border-slate-400">Subject</th>
-              <th className="border text-left border-slate-400">CAT 1 (10)</th>
-              <th className="border text-left border-slate-400">CAT 2 (10)</th>
-              <th className="border text-left border-slate-400">Total (20)</th>
-              <th className="border text-left border-slate-400">Total (%)</th>
-              <th className="border text-left border-slate-400">Actions</th>
+              <th className="border border-slate-400 text-center">S/N</th>
+              <th className="border text-left border-slate-400">Subjects</th>
+              <th className="border border-slate-400 text-center">CAT 1 (10)</th>
+              <th className="border border-slate-400 text-center">CAT 2 (10)</th>
+              <th className="border border-slate-400 text-center">Total (20)</th>
+              <th className="border border-slate-400 text-center">Total (%)</th>
+              <th className="border border-slate-400 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {studentResult?.length > 0 ? (
               studentResult.map((result, index) => (
                 <tr key={index}>
-                  <td className="border border-slate-400">{index + 1}</td>
+                  <td className="border border-slate-400 text-center">{index + 1}</td>
                   <td className="border border-slate-400">{result.subject.name}</td>
                   
                   {/* CAT1 input: Toggle between editable and read-only */}
-                  <td className="border border-slate-400">
+                  <td className="border border-slate-400 text-center">
                     {editingRow === index ? (
                       <input
                         type="number"
@@ -100,7 +74,7 @@ const ResultSheet = () => {
                   </td>
 
                   {/* CAT2 input: Toggle between editable and read-only */}
-                  <td className="border border-slate-400">
+                  <td className="border border-slate-400 text-center">
                     {editingRow === index ? (
                       <input
                         type="number"
@@ -114,13 +88,13 @@ const ResultSheet = () => {
                   </td>
 
                   {/* Total score */}
-                  <td className="border border-slate-400 font-bold">{result.totalScore}</td>
+                  <td className="border border-slate-400 font-bold text-center">{result.midTermTotal}</td>
                   
                   {/* Percentage */}
-                  <td className="border border-slate-400 font-bold">{ Math.round(((result.totalScore / 20) * 100))}%</td>
+                  <td className="border border-slate-400 font-bold text-center">{ Math.round((result.midTermTotal / 20) * 100)}%</td>
 
                   {/* Toggle edit/save buttons */}
-                  <td className="border border-slate-400">
+                  <td className="border border-slate-400 text-center">
                     {editingRow === index ? (
                       <button
                         className="bg-green-600 text-white px-4 py-2 rounded-lg"
@@ -151,4 +125,4 @@ const ResultSheet = () => {
   );
 };
 
-export default ResultSheet;
+export default EditResult;

@@ -63,3 +63,18 @@ export const get_a_staff = asyncHandler(async (req, res, next) => {
         }
     })
 })
+export const get_staffs_with_first_last_name = asyncHandler(async (req, res, next) => {
+    const staffs = await Staff.find({}, "firstName lastName")
+
+    if (!staffs){
+        return res.status(404).json({
+            status: "fail",
+            message: "No staff record found!"
+        })
+    }
+
+    res.status(200).json({
+        status: "success",
+        data: staffs
+    })
+})

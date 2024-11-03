@@ -48,8 +48,6 @@ export const create_class = asyncHandler(async(req, res, next) => {
 
     res.status(201).json({
         status: "success",
-        data: {
-            student_class
-        }
+        message: "Class created!"
     })
 })

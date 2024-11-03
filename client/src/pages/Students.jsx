@@ -1,5 +1,5 @@
 import React from 'react';
-import useFetchStudents from '../components/customHooks';
+import { useFetchStudents } from '../components/customHooks';
 import StudentView from '../components/StudentView';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
 
@@ -32,7 +32,7 @@ const Students = () => {
       classInfo={classInfo}
       selectedClassAndArm={selectedClassAndArm}
       handleFormInput={handleFormInput}
-      handleSubmit={() => fetchStudents()}
+      handleSubmit={(e) => fetchStudents(e)}
       students={students}
       classDetails={classDetails}
       renderActions={renderActions}

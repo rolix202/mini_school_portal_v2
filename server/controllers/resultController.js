@@ -38,3 +38,36 @@ export const create_result = asyncHandler(async(req, res, next) => {
         }
     })
 })
+
+export const update_single_result = asyncHandler(async(req, res, next) => {
+    const { id } = req.params
+    const { firstCA, secondCA } = req.body
+
+    const result = await Result.findByIdAndUpdate(id, {
+        $set: {
+            "assessments.firstCA": firstCA,
+            "assessments.secondCA": secondCA
+        }
+    }, { new: true })
+
+    if (!result){
+        return res.status(404).json({
+            status: "fail",
+            message: "Result not found!"
+        })
+    }
+
+    result.midTermTotal = (firstCA || 0) + (secondCA || 0);
+    result.finalTermTotal = result.midTermTotal + (result.assessments.thirdCA || 0) + (result.assessments.exam || 0);
+    
+    await result.save();
+
+    res.status(200).json({
+        status: "success",
+        message: "Result updated!",
+        data: {
+            result
+        }
+    })
+    
+})
