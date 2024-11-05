@@ -90,6 +90,10 @@ staffSchema.pre("save", async function(next) {
     }
 });
 
+staffSchema.methods.comparePassword = async function(staffPass, passDb){
+    return await bcrypt.compare(staffPass, passDb)
+}
+
 const Staff = mongoose.model("Staff", staffSchema)
 
 export default Staff;

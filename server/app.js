@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config()
+
 import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
@@ -5,10 +8,9 @@ import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from "morgan";
 import mongoose from 'mongoose';
-import * as dotenv from 'dotenv';
-dotenv.config()
 import cors from 'cors';
-
+import session from 'express-session';
+import passport from 'passport';
 
 import authRoute from "./routes/authRoute.js"
 import classRoute from "./routes/classRoute.js"
@@ -16,6 +18,9 @@ import staffRoute from "./routes/staffRoute.js"
 import studentRoute from "./routes/studentRoute.js"
 import subjectRoute from "./routes/subjectRoute.js"
 import resultRoute from "./routes/resultRoute.js"
+import { configureJwtStrategy } from './config/jwtAuthConfig.js';
+import { isAunthenticated } from './middlewares/auth.js';
+
 
 
 const app = express();
@@ -35,6 +40,9 @@ main().catch(err => console.error(err))
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+configureJwtStrategy()
+app.use(passport.initialize());
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -44,7 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 app.use("/api/v1/auth", authRoute)
-app.use("/api/v1/staffs", staffRoute)
+app.use("/api/v1/staffs", isAunthenticated, staffRoute)
 app.use("/api/v1/students", studentRoute)
 app.use("/api/v1/class", classRoute)
 app.use("/api/v1/subjects", subjectRoute)
